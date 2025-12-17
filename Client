@@ -1,0 +1,32 @@
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class Client {
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("localhost", 8080);
+             InputStream inputStream = socket.getInputStream();
+             OutputStream outputStream = socket.getOutputStream()) {
+            Scanner scanner = new Scanner(System.in);
+
+            while (true) {
+                System.out.print("\nВведите число (0-255) или -1 для выхода: ");
+                int number = scanner.nextInt();
+                if (number == -1) {
+                    outputStream.write(-1);
+                    break;
+                }
+                outputStream.write(number);
+                System.out.println("Отправлено серверу: " + number);
+                int response = inputStream.read();
+                System.out.println("Ответ сервера (число+1): \u001B[32m" + response + "\u001B[0m");
+            }
+            System.out.println("Клиент завершил работу");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
