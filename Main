@@ -1,0 +1,14 @@
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Запуск сервера и клиента...");
+        new Thread(() -> {
+            try {
+                Server.main(args);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+        Thread.sleep(3000);
+        Client.main(args);
+    }
+}
